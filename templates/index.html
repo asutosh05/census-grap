@@ -9,6 +9,12 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" 
+
+href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
+<script type="text/javascript" 
+
+src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
         
        
 </head>
@@ -18,12 +24,6 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Census Data</a>
     </div>
-    <!--<ul class="nav navbar-nav">-->
-    <!--  <li class="active"><a href="#">Home</a></li>-->
-    <!--  <li><a href="#">Page 1</a></li>-->
-    <!--  <li><a href="#">Page 2</a></li>-->
-    <!--  <li><a href="#">Page 3</a></li>-->
-    <!--</ul>-->
   </div>
 </nav>
 
@@ -43,12 +43,61 @@
   </div>
 </div>
 
-<div></div>
+<div class="container">
+  <h2>Censur Data</h2>
+  <table id="censurData" class="table table-striped">
+    <thead>
+      <tr>
+            <td>age</td>
+            <td>workclass</td>
+            <td>fnlwgt</td>
+            <td>education</td>
+            <td>education-num</td>
+            <td>marital-status</td>
+            <td>occupation</td>
+            <td>relationship</td>
+            <td>race</td>
+            <td>sex</td>
+            <td>capital-gain</td>
+            <td>capital-loss</td>
+            <td>hours-per-week</td>
+            <td>native-country</td>
+            <td>property</td>
+      </tr>
+    </thead>
+    <tbody>
+     {% for obj in data %}
+     <tr>
+            
+            <td>{{obj["age"]}}</td>
+            <td>{{obj["workclass"]}}</td>
+            <td>{{obj["fnlwgt"]}}</td>
+            <td>{{obj["education"]}}</td>
+            <td>{{obj["education-num"]}}</td>
+            <td>{{obj["marital-status"]}}</td>
+            <td>{{obj["occupation"]}}</td>
+            <td>{{obj["relationship"]}}</td>
+            <td>{{obj["race"]}}</td>
+            <td>{{obj["sex"]}}</td>
+            <td>{{obj["capital-gain"]}}</td>
+            <td>{{obj["capital-loss"]}}</td>
+            <td>{{obj["hours-per-week"]}}</td>
+            <td>{{obj["native-country"]}}</td>
+            <td>{{obj["property"]}}</td>
+           
+            
+     </tr>
+     {% endfor %}
+    </tbody>
+  </table>
+</div>
+    
 
 <script type="text/javascript">
     $(document).ready(function () {
         getGenderData()
         getRelationshipData()
+         $('#censurData').dataTable();
         });
         function getGenderData() {
             $.ajax({
@@ -187,7 +236,6 @@
                 ]
             }]
         };
-       
 </script>
 </body>
 </html>

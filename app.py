@@ -1,21 +1,25 @@
 from flask import Flask, request, render_template,jsonify
 from flask_pymongo import PyMongo
 import os,json
+from flask_caching import Cache
 
 
 app=Flask(__name__)
 
 #Using MongoDb Service provider Mlab free sandbox
 app.config['MONGO_DBNAME']='dbname'
-app.config['MONGO_URI']='mongodb://YourUser:Yourpass@ds139262.mlab.com:39262/dbname'
+app.config['MONGO_URI']='mongodb://username:password@ds139262.mlab.com:39262/database'
 
+#Initialize cache
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 mongo = PyMongo(app)
 
 
 @app.route('/')
-def home_page():    
-    return render_template('index.html')
+def home_page():
+    data= list(mongo.db.census.find().limit(100))
+    return render_template('index.html',data=data)
 
 @app.route('/gender')
 def getMaleFemaleCount():
@@ -33,7 +37,17 @@ def getRelationshipCount():
         countResult[res.get('_id')] = res.get('count')
     return jsonify(json.dumps(countResult))
 
-
+    
+    
+    
+    
+#This fucntion get all data from data base and save it
+#In a cache 
+# @cache.cached(timeout=50, key_prefix='censusData')
+# def getFullData():
+#     data= list(mongo.db.census.find().limit(5))
+#     return data
+    
 # app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
 
 port = int(os.environ.get('PORT', 5000))
