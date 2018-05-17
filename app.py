@@ -27,7 +27,7 @@ In that time use can use the appliction.
 @app.route('/')
 @cache.cached(timeout=100)
 def home_page():
-    data= list(mongo.db.census.find().limit(10000))
+    data= list(mongo.db.census.find().limit(100))
     return render_template('index.html',data=data)
 
 #To get the gender type  count
@@ -64,4 +64,4 @@ def getRelationshipCount():
 # app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
 
 port = int(os.environ.get('PORT', 5000))
-app.run(host="0.0.0.0", port=port, debug=True)
+app.run(host="127.0.0.1", port=port, debug=True)
