@@ -26,7 +26,7 @@ In that time use can use the appliction.
 @app.route('/')
 @cache.cached(timeout=100)
 def home_page():
-    data= list(mongo.db.census.find().limit(1000))
+    data= list(mongo.db.census.find().limit(10000))
     return render_template('index.html',data=data)
 
 #To get the gender type  count
