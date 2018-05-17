@@ -10,6 +10,7 @@ app=Flask(__name__)
 
 #Using MongoDb Service provider Mlab free sandbox
 #Pymongo driver to connect mongodb
+#Its live db link to test the application with readonly user
 app.config['MONGO_DBNAME']='ps_time_table'
 app.config['MONGO_URI']='mongodb://testdev:testdev@ds139262.mlab.com:39262/ps_time_table'
 
