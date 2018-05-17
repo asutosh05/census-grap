@@ -17,7 +17,12 @@ app.config['MONGO_URI']='mongodb://testdev:testdev@ds139262.mlab.com:39262/ps_ti
 #Initialize cache
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
-mongo = PyMongo(app)
+mongo = PyMongo
+
+#For store the data globaly to get the result later basic caching
+resultGender={}
+resultRelationship={}
+fullResult=[]
 
 '''
 Main fuction to load census data ist fetching 10k data 
@@ -27,27 +32,40 @@ In that time use can use the appliction.
 @app.route('/')
 @cache.cached(timeout=100)
 def home_page():
-    data= list(mongo.db.census.find().limit(10000))
+    #checking result already present
+    if fullResult is None:
+        data= list(mongo.db.census.find().limit(100))
+        fullResult=data
+    else:
+        data=fullResult
     return render_template('index.html',data=data)
 
 #To get the gender type  count
 #Converting json array to dist type
 @app.route('/gender')
 def getMaleFemaleCount():
-    result= list(mongo.db.census.aggregate([{"$group":{"_id":"$sex","count":{"$sum":1}}}]))
-    countResult= {}
-    for res in result:
-        countResult[res.get('_id')] = res.get('count')
+    if resultGender is None:
+        result= list(mongo.db.census.aggregate([{"$group":{"_id":"$sex","count":{"$sum":1}}}]))
+        countResult= {}
+        for res in result:
+            countResult[res.get('_id')] = res.get('count')
+        resultGender=countResult
+    else:
+        countResult=resultGender
     return jsonify(json.dumps(countResult))
 
 #To count relationship type count
 #Converting json array to dist type 
 @app.route('/relationship')
 def getRelationshipCount():
-    result= list(mongo.db.census.aggregate([{"$group":{"_id":"$relationship","count":{"$sum":1}}}]))
-    countResult= {}
-    for res in result:
-        countResult[res.get('_id')] = res.get('count')
+    if resultRelationship is None:
+        result= list(mongo.db.census.aggregate([{"$group":{"_id":"$relationship","count":{"$sum":1}}}]))
+        countResult= {}
+        for res in result:
+            countResult[res.get('_id')] = res.get('count')
+        resultRelationship=countResult
+    else:
+        countResult=resultRelationship
     return jsonify(json.dumps(countResult))
 
     
